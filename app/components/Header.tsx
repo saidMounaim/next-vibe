@@ -1,8 +1,13 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 const Header = () => {
+  const { data: session } = useSession();
+
   const classLink = "text-lg text-[#11235A] font-medium";
 
   return (
@@ -23,20 +28,32 @@ const Header = () => {
           </li>
         </ul>
         <div className="flex gap-x-3">
-          <Button
-            className="bg-[#11235A] text-white hover:bg-[#7ED7C1] transition"
-            asChild
-          >
-            <Link href="/login">
-              <User />
-            </Link>
-          </Button>
-          <Button
-            className="bg-[#11235A] text-white hover:bg-[#7ED7C1] transition"
-            asChild
-          >
-            <Link href="/register">Register</Link>
-          </Button>
+          {session?.user && (
+            <Button
+              onClick={() => signOut()}
+              className="bg-[#11235A] text-white hover:bg-[#7ED7C1] transition"
+            >
+              Log out
+            </Button>
+          )}
+          {!session && (
+            <>
+              <Button
+                className="bg-[#11235A] text-white hover:bg-[#7ED7C1] transition"
+                asChild
+              >
+                <Link href="/login">
+                  <User />
+                </Link>
+              </Button>
+              <Button
+                className="bg-[#11235A] text-white hover:bg-[#7ED7C1] transition"
+                asChild
+              >
+                <Link href="/register">Register</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
