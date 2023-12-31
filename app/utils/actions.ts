@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import prisma from "../utils/db";
 import bcrypt from "bcryptjs";
-import { IRegisterUserAction } from "../types/types";
+import { ILoginUserAction, IRegisterUserAction } from "../types/types";
 
 // Create User Action
 export async function registerUserAction(data: IRegisterUserAction) {
