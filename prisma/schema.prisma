@@ -15,8 +15,8 @@ model User {
   name     String
   email    String
   password String
-  mobile   String
-  image    String
+  mobile   String?
+  image    String?
   isAdmin  Boolean
 
   createdAt DateTime @default(now())
