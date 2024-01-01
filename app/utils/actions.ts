@@ -20,3 +20,21 @@ export async function registerUserAction(data: IRegisterUserAction) {
 
   redirect("/login");
 }
+
+// Get User By ID
+export async function getUserByIdAction(id: string) {
+  "use server";
+
+  const user = await prisma.user.findFirst({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      mobile: true,
+      image: true,
+    },
+  });
+
+  return user;
+}
