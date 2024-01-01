@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import DropdownUser from "./DropdownUser";
 
 const Header = () => {
   const { data: session } = useSession();
@@ -12,7 +13,7 @@ const Header = () => {
 
   return (
     <header className="py-5 shadow-md">
-      <div className="lg:max-w-5xl mx-auto w-full lg:px-4 flex justify-between items-center">
+      <div className="lg:max-w-6xl mx-auto w-full lg:px-4 flex justify-between items-center">
         <Link href="/" className="text-4xl font-bold text-[#11235A]">
           Next <span className="text-[#7ED7C1]">Vibe</span>
         </Link>
@@ -28,14 +29,7 @@ const Header = () => {
           </li>
         </ul>
         <div className="flex gap-x-3">
-          {session?.user && (
-            <Button
-              onClick={() => signOut()}
-              className="bg-[#11235A] text-white hover:bg-[#7ED7C1] transition"
-            >
-              Log out
-            </Button>
-          )}
+          {session?.user && <DropdownUser session={session} />}
           {!session && (
             <>
               <Button
