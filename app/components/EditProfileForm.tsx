@@ -15,9 +15,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
+import { FileUploader } from "./FileUploader";
+import { useUploadThing } from "../utils/uploadthing";
+import { useState } from "react";
 
 const EditProfileForm = ({ userDetails }: any) => {
   const { toast } = useToast();
+  const [files, setFiles] = useState<File[]>([]);
+
+  const { startUpload } = useUploadThing("imageUploader");
 
   const form = useForm<z.infer<typeof EditProfileSchema>>({
     resolver: zodResolver(EditProfileSchema),
@@ -29,7 +35,19 @@ const EditProfileForm = ({ userDetails }: any) => {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof EditProfileSchema>) {
+  async function onSubmit(values: z.infer<typeof EditProfileSchema>) {
+    let uploadedImageUrl = values.image;
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+
+      if (!uploadedImages) {
+        return;
+      }
+
+      uploadedImageUrl = uploadedImages[0].url;
+    }
+
     toast({
       className: "bg-green-700 text-md text-white font-medium",
       title: "User registered successfully",
@@ -50,7 +68,11 @@ const EditProfileForm = ({ userDetails }: any) => {
               <FormItem>
                 <FormLabel className="text-white text-md">Avatar:</FormLabel>
                 <FormControl>
-                  <Input type="file" className="w-full" {...field} />
+                  <FileUploader
+                    onFieldChange={field.onChange}
+                    imageUrl={field.value}
+                    setFiles={setFiles}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
